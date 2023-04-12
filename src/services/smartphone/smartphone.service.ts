@@ -1,5 +1,6 @@
 import { Smartphone } from '../../entities/smartphone/smartphone.entity';
 import { SmartphoneData } from '../../types/interfaces';
+import { SmartphoneDescriptionData } from '../../types/types';
 import AppError from '../../utils/appError';
 import { AppDataSource } from '../../utils/database/data-source';
 import { getBrandByName } from './smartphoneBrand.service';
@@ -38,6 +39,23 @@ export const getSmartphone = async (id: string) => {
   return await smartphoneRepository.findOne({
     relations: { images: true, brand: true },
     where: { id },
+  });
+};
+
+export const updateSmartphoneById = async (
+  id: string,
+  dataSmartphone: SmartphoneDescriptionData
+) => {
+  const { model, display, price, year, cpu, frequency, memory, nfc } = dataSmartphone;
+  return await smartphoneRepository.update(id, {
+    model,
+    display,
+    price,
+    year,
+    cpu,
+    frequency,
+    memory,
+    nfc,
   });
 };
 

@@ -4,6 +4,7 @@ import {
   deleteSmartphoneByIdList,
   getSmartphone,
   getSmartphoneList,
+  updateSmartphoneById,
 } from '../services/smartphone/smartphone.service';
 import { createBrand, getBrands } from '../services/smartphone/smartphoneBrand.service';
 import { getImagesNameList } from '../services/smartphone/smartphoneImages.service';
@@ -34,6 +35,21 @@ export const getSmartphones = async (req: Request, res: Response, next: NextFunc
   try {
     const smartphoneList = await getSmartphoneList();
     return res.status(STATUS.OK).send(smartphoneList);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateSmartphone = async (
+  req: Request<{ id: string }, {}, SmartphoneDescriptionData>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { body } = req;
+    const { id } = req.params;
+    const smartphone = await updateSmartphoneById(id, body);
+    return res.status(STATUS.OK).send(smartphone);
   } catch (error) {
     next(error);
   }
