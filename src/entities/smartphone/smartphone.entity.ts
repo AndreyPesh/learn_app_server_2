@@ -36,6 +36,7 @@ export class Smartphone extends Model {
   @OneToMany(() => SmartphoneImage, (image) => image.smartphone, {
     cascade: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   @JoinColumn()
   images: SmartphoneImage[];

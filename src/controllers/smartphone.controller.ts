@@ -48,7 +48,11 @@ export const updateSmartphone = async (
   try {
     const { body } = req;
     const { id } = req.params;
-    const smartphone = await updateSmartphoneById(id, body);
+    const listImages: string[] = (req.files as Array<RequestImageData>).map(
+      (imageData) => imageData.filename
+    );
+
+    const smartphone = await updateSmartphoneById(id, body, listImages);
     return res.status(STATUS.OK).send(smartphone);
   } catch (error) {
     next(error);
