@@ -23,3 +23,10 @@ export const getImagesNameList = async (imageIdList: string[]) => {
   const imageNameList = await Promise.all(queryListById);
   return imageNameList.flat();
 };
+
+export const removeImages = async (imageList: SmartphoneImage[]) => {
+  const queryRemoveListImages = imageList.map(async (image) => {
+    await imagesSmartphoneRepository.remove(image);
+  });
+  return await Promise.all(queryRemoveListImages);
+};

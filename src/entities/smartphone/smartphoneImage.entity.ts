@@ -8,7 +8,8 @@ export class SmartphoneImage extends Model {
   name: string;
 
   @ManyToOne(() => Smartphone, (smartphone) => smartphone.images, {
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
   })
   smartphone: Smartphone;
 }

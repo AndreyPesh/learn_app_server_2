@@ -4,7 +4,7 @@ import { SmartphoneDescriptionData } from '../../types/types';
 import AppError from '../../utils/appError';
 import { AppDataSource } from '../../utils/database/data-source';
 import { getBrandByName } from './smartphoneBrand.service';
-import { addImage } from './smartphoneImages.service';
+import { addImage, removeImages } from './smartphoneImages.service';
 
 const smartphoneRepository = AppDataSource.getRepository(Smartphone);
 
@@ -44,19 +44,29 @@ export const getSmartphone = async (id: string) => {
 
 export const updateSmartphoneById = async (
   id: string,
-  dataSmartphone: SmartphoneDescriptionData
+  dataSmartphone: SmartphoneDescriptionData,
+  listImages: string[]
 ) => {
-  const { model, display, price, year, cpu, frequency, memory, nfc } = dataSmartphone;
-  return await smartphoneRepository.update(id, {
-    model,
-    display,
-    price,
-    year,
-    cpu,
-    frequency,
-    memory,
-    nfc,
-  });
+  try {
+    const currentData = await getSmartphone(id);
+    await removeImages(currentData.images);
+    const { model, display, price, year, cpu, frequency, memory, nfc, brand } = dataSmartphone;
+    const newBrand = await getBrandByName(brand);
+    if(!newBrand) {
+      throw new AppError(500, 'Brand is not specified');
+    }
+    Object.assign(
+      currentData,
+      { model, display, price, year, cpu, frequency, memory, nfc },
+      { brand: newBrand },
+      { images: [] }
+    );
+
+    const smartphone = await smartphoneRepository.save(currentData);
+    await Promise.all(listImages.map((name) => addImage({ name, smartphone })));
+  } catch(err: unknown) {
+    throw new AppError(500, String(err));
+  }
 };
 
 export const deleteSmartphoneByIdList = async (listId: string[]) => {
