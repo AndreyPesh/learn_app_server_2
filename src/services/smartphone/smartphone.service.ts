@@ -32,11 +32,14 @@ export const createSmartphone = async (data: SmartphoneData) => {
 };
 
 export const getSmartphoneList = async (page: number, limit: number) => {
-  return await smartphoneRepository.find({
+  const pageFromZero = page - 1;
+  const numberRecords = await smartphoneRepository.count();
+  const smartphoneList = await smartphoneRepository.find({
     relations: { images: true, brand: true },
     take: limit,
-    skip: page * limit,
+    skip: pageFromZero * limit,
   });
+  return { numberRecords, smartphoneList };
 };
 
 export const getSmartphone = async (id: string) => {

@@ -40,8 +40,8 @@ export const getSmartphones = async (
   try {
     const { page, limit } = req.query;
     if (page && limit && typeof page === 'string' && typeof limit === 'string') {
-      const smartphoneList = await getSmartphoneList(Number(page), Number(limit));
-      return res.status(STATUS.OK).send(smartphoneList);
+      const smartphoneData = await getSmartphoneList(Number(page), Number(limit));
+      return res.status(STATUS.OK).send(smartphoneData);
     }
     throw new AppError(STATUS.BAD_REQUEST, 'Bad request');
   } catch (error) {
