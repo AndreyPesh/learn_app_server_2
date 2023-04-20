@@ -30,3 +30,8 @@ export interface SmartphoneData {
   nfc: boolean;
   images: string[];
 }
+
+export interface ReqSmartphoneListParameters {
+  page: string;
+  limit: string;
+}
