@@ -30,10 +30,6 @@ export class Smartphone extends Model {
   @Column({ type: 'boolean', default: false })
   nfc!: boolean;
 
-  @ManyToOne(() => Cart, (product) => product.id)
-  @JoinColumn()
-  cart: Cart;
-
   @ManyToOne(() => SmartphoneBrand)
   @JoinColumn()
   brand: SmartphoneBrand;
