@@ -1,3 +1,4 @@
+import { Cart } from '../entities/cart/cart.entity';
 import { User } from '../entities/user.entity';
 import { CreateUserInput, UpdateUserInput } from '../schemas/user.schema';
 import { AppDataSource } from '../utils/database/data-source';
@@ -5,7 +6,11 @@ import { AppDataSource } from '../utils/database/data-source';
 const userRepository = AppDataSource.getRepository(User);
 
 export const createUser = async (input: CreateUserInput) => {
-  return (await AppDataSource.manager.save(AppDataSource.manager.create(User, input))) as User;
+  const cart = new Cart();
+  const user = (await AppDataSource.manager.save(
+    AppDataSource.manager.create(User, Object.assign(input, { cart }))
+  )) as User;
+  return user;
 };
 
 export const findUserByEmail = async ({ email }: { email: string }) => {

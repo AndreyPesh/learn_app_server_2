@@ -2,6 +2,7 @@ import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } fr
 import Model from '../model.entity';
 import { SmartphoneBrand } from './smartphoneBrands.entity';
 import { SmartphoneImage } from './smartphoneImage.entity';
+import { Cart } from '../cart/cart.entity';
 
 @Entity('smartphone')
 export class Smartphone extends Model {
@@ -29,6 +30,10 @@ export class Smartphone extends Model {
   @Column({ type: 'boolean', default: false })
   nfc!: boolean;
 
+  @ManyToOne(() => Cart, (product) => product.id)
+  @JoinColumn()
+  cart: Cart;
+
   @ManyToOne(() => SmartphoneBrand)
   @JoinColumn()
   brand: SmartphoneBrand;
@@ -36,7 +41,7 @@ export class Smartphone extends Model {
   @OneToMany(() => SmartphoneImage, (image) => image.smartphone, {
     cascade: true,
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   images: SmartphoneImage[];

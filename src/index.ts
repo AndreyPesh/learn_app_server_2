@@ -5,6 +5,7 @@ import userRouter from './routes/userRoutes';
 import adminRouter from './routes/admin/adminRoutes';
 import phonesRouter from './routes/phonesRouter';
 import smartphoneRouter from './routes/smartphoneRoutes';
+import cartRouter from './routes/cartRoutes';
 import smartphoneAdminRouter from './routes/admin/adminSmartphoneRoutes';
 import validateEnv from './utils/validateEnv';
 import config from 'config';
@@ -31,6 +32,7 @@ const startServer = async () => {
       app.use('/api/products', phonesRouter);
       app.use('/api/smartphones', smartphoneRouter);
       app.use('/api/smartphones', smartphoneAdminRouter);
+      app.use('/api/cart', cartRouter);
       app.get('/api/healthchecker', redisHandler);
 
       // UNHANDLED ROUTE
