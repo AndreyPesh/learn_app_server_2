@@ -31,8 +31,15 @@ export const createSmartphone = async (data: SmartphoneData) => {
   }
 };
 
-export const getSmartphoneList = async () => {
-  return await smartphoneRepository.find({ relations: { images: true, brand: true } });
+export const getSmartphoneList = async (page: number, limit: number) => {
+  const pageFromZero = page - 1;
+  const numberRecords = await smartphoneRepository.count();
+  const smartphoneList = await smartphoneRepository.find({
+    relations: { images: true, brand: true },
+    take: limit,
+    skip: pageFromZero * limit,
+  });
+  return { numberRecords, smartphoneList };
 };
 
 export const getSmartphone = async (id: string) => {
@@ -52,7 +59,7 @@ export const updateSmartphoneById = async (
     await removeImages(currentData.images);
     const { model, display, price, year, cpu, frequency, memory, nfc, brand } = dataSmartphone;
     const newBrand = await getBrandByName(brand);
-    if(!newBrand) {
+    if (!newBrand) {
       throw new AppError(500, 'Brand is not specified');
     }
     Object.assign(
@@ -64,7 +71,7 @@ export const updateSmartphoneById = async (
 
     const smartphone = await smartphoneRepository.save(currentData);
     await Promise.all(listImages.map((name) => addImage({ name, smartphone })));
-  } catch(err: unknown) {
+  } catch (err: unknown) {
     throw new AppError(500, String(err));
   }
 };

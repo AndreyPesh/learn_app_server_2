@@ -9,9 +9,10 @@ import {
 import { createBrand, getBrands } from '../services/smartphone/smartphoneBrand.service';
 import { getImagesNameList } from '../services/smartphone/smartphoneImages.service';
 import { STATUS } from '../types/constants';
-import { RequestImageData } from '../types/interfaces';
+import { ReqSmartphoneListParameters, RequestImageData } from '../types/interfaces';
 import { SmartphoneDescriptionData } from '../types/types';
 import { deleteImagesFromStore } from '../utils/filesystem/deleteImages';
+import AppError from '../utils/appError';
 
 export const addSmartphone = async (
   req: Request<{}, {}, SmartphoneDescriptionData>,
@@ -31,10 +32,18 @@ export const addSmartphone = async (
   }
 };
 
-export const getSmartphones = async (req: Request, res: Response, next: NextFunction) => {
+export const getSmartphones = async (
+  req: Request<{}, {}, ReqSmartphoneListParameters>,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const smartphoneList = await getSmartphoneList();
-    return res.status(STATUS.OK).send(smartphoneList);
+    const { page, limit } = req.query;
+    if (page && limit && typeof page === 'string' && typeof limit === 'string') {
+      const smartphoneData = await getSmartphoneList(Number(page), Number(limit));
+      return res.status(STATUS.OK).send(smartphoneData);
+    }
+    throw new AppError(STATUS.BAD_REQUEST, 'Bad request');
   } catch (error) {
     next(error);
   }
