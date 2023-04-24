@@ -8,7 +8,7 @@ export class CartDevice extends Model {
   @ManyToOne(() => Cart, (cart) => cart.id)
   cart: Cart;
 
-  @OneToOne(() => Smartphone, (smartphone) => smartphone.id)
+  @OneToOne(() => Smartphone, (smartphone) => smartphone.id, { eager: true })
   @JoinColumn()
   device_id: Smartphone;
 }

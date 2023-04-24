@@ -6,7 +6,7 @@ export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @OneToMany(() => CartDevice, (cartDevices) => cartDevices.cart)
+  @OneToMany(() => CartDevice, (cartDevices) => cartDevices.cart, {eager: true})
   @JoinColumn()
   cartDevices: CartDevice[];
 }
