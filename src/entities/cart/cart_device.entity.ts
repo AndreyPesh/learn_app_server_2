@@ -10,5 +10,5 @@ export class CartDevice extends Model {
 
   @OneToOne(() => Smartphone, (smartphone) => smartphone.id)
   @JoinColumn()
-  device_id: Smartphone
+  device_id: Smartphone;
 }

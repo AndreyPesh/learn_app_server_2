@@ -38,7 +38,7 @@ export class User extends Model {
   })
   verified!: boolean;
 
-  @OneToOne(() => Cart, (cart) => cart.id, { cascade: true })
+  @OneToOne(() => Cart, (cart) => cart.id, { eager: true })
   @JoinColumn()
   cart: Cart;
 
